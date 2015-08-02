@@ -102,6 +102,14 @@ Meteor.methods(
         username: Meteor.user().username
       });
       console.log("It was added");
+      var List = { range: [text[0]], ports: text[1] }
+      console.log(List);
+      libnmap.nmap('scan', opts, function(err, report){
+        if (err) throw err
+        report.forEach(function(item){
+          console.log(item[0])
+        });
+      }); 
 //      document.getElementById("test").innerHTML = "Added!?";
     }
 
@@ -158,8 +166,10 @@ if (Meteor.isServer) {
   Meteor.publish("tasks", function () {
     return Tasks.find({}, {sort: {ip: 1}})
   });
-  var libnmap = Meteor.npmRequire('node-libnmap');
 
+
+  var libnmap = Meteor.npmRequire('node-libnmap');
+/**
   var opts = {
   range: ['localhost', '141.223.163.64']
 }
@@ -169,6 +179,6 @@ libnmap.nmap('scan', opts, function(err, report){
   report.forEach(function(item){
     console.log(item[0])
   });
-});
+}); */
 
 }
