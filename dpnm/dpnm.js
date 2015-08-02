@@ -110,6 +110,9 @@ Meteor.methods(
           console.log(item[0])
         });
       });
+      console.log("Checked server");
+
+      Tasks.update({ip: text[0]}, {$set: {status: "Online"}});
 //      document.getElementById("test").innerHTML = "Added!?";
     }
 
