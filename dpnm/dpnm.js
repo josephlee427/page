@@ -102,14 +102,14 @@ Meteor.methods(
         username: Meteor.user().username
       });
       console.log("It was added");
-      var List = { range: [text[0]], ports: text[1] }
-      console.log(List);
+      var opts = { range: [text[0]], ports: text[1] }
+      console.log(opts);
       libnmap.nmap('scan', opts, function(err, report){
         if (err) throw err
         report.forEach(function(item){
           console.log(item[0])
         });
-      }); 
+      });
 //      document.getElementById("test").innerHTML = "Added!?";
     }
 
