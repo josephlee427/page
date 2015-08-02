@@ -1,0 +1,87 @@
+<head>
+  <title>DPNM Servers</title>
+</head>
+
+<body>
+  <div class="container">
+    <header>
+      <h1>List of DP&NM Servers ({{onlineServers}} online)</h1>
+
+      <label class="hide-offline">
+        <input type="checkbox" checked="{{hideOffline}}" />
+        Hide Offline Servers
+      </label>
+
+      {{> loginButtons}}
+
+      {{#if currentUser}}
+        <form class="new-task" method="post">
+          <input type="text" name="serverIP" placeholder="Type to add the server IP" /><br>
+          <input type="text" name="serverPort" placeholder="Type to add the server port" /><br>
+          <button class="submit">
+          <input type="submit" value="Submit">
+          </button>
+        </form>
+      {{/if}}
+
+      <h4> IP Port Status Creator</h4>
+      <form class="updateServers" method="post">
+<!--        <button class="submit"> /!-->
+        <input type="submit" value="Update!">
+<!--      </button> /!-->
+    </form>
+    </header>
+
+    <ul>
+      {{#each tasks}}
+        {{> task}}
+      {{/each}}
+      <p id="test"> </p>
+      <form class="updateServers" method="post">
+<!--        <button class="submit"> /!-->
+        <input type="submit" value="Update!">
+      </form>
+    </ul>
+  </div>
+
+<!--
+  <script src="ping.js"></script>
+    <script>
+    var do_ping = function() {
+        ping(document.getElementById('pingurl').value).then(function(delta) {
+            alert(delta);
+        }).catch(function(error) {
+            alert(String(error));
+        });
+    };
+    </script>
+
+    <script src="dpnm.js">
+
+
+  <input id='pingurl' type='text' value='http://google.ca'/>
+  <button onclick='do_ping()'>Ping</button>
+/!-->
+
+
+</body>
+
+<template name="task">
+  <li class="{{#if checked}}checked{{/if}} {{#if private}}private{{/if}}">
+    <button class="delete">&times;</button>
+
+    <input type="checkbox" checked="{{checked}}" class="toggle-checked" />
+
+    {{#if isOwner}}
+    <button class="toggle-private">
+      {{#if private}}
+        Private
+      {{else}}
+        Public
+      {{/if}}
+    </button>
+    {{/if}}
+
+    <span class="text"><strong>{{ip}} - {{port}}</strong> - {{status}} - {{username}} - {{test}}</span>
+  </li>
+</template>

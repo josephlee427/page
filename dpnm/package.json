@@ -1,0 +1,65 @@
+{
+  "name": "node-libnmap",
+  "version": "0.1.13",
+  "description": "Use nmap from node.js",
+  "author": {
+    "name": "Jason Gerfen",
+    "email": "jason.gerfen@gmail.com"
+  },
+  "keywords": [
+    "nmap",
+    "nmap host discovery",
+    "libnmap",
+    "threaded nmap scanner",
+    "network host discovery",
+    "host operating system discovery",
+    "port scanner"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jas-/node-libnmap.git"
+  },
+  "bugs": {
+    "url": "https://github.com/jas-/node-libnmap/issues"
+  },
+  "scripts": {
+    "start": "node index.js",
+    "test": "make test"
+  },
+  "dependencies": {
+    "netmask": "~1.0.4",
+    "async": "~0.2.10",
+    "ipv6": "~3.1.1",
+    "redis": "0.8.2",
+    "github": "0.1.8"
+  },
+  "devDependencies": {
+    "mocha": "~1.17.0",
+    "chai": "~1.8.1"
+  },
+  "license": "MIT",
+  "engine": "node >= v0.11.*",
+  "gitHead": "5149004773a6dd19414faac565a8d81add1c76ac",
+  "homepage": "https://github.com/jas-/node-libnmap",
+  "_id": "node-libnmap@0.1.13",
+  "_shasum": "1ffedc29ccd966b3425ae74e1eb968021ddff293",
+  "_from": "node-libnmap@*",
+  "_npmVersion": "1.4.28",
+  "_npmUser": {
+    "name": "jas-",
+    "email": "jason.gerfen@gmail.com"
+  },
+  "maintainers": [
+    {
+      "name": "jas-",
+      "email": "jason.gerfen@gmail.com"
+    }
+  ],
+  "dist": {
+    "shasum": "1ffedc29ccd966b3425ae74e1eb968021ddff293",
+    "tarball": "http://registry.npmjs.org/node-libnmap/-/node-libnmap-0.1.13.tgz"
+  },
+  "directories": {},
+  "_resolved": "https://registry.npmjs.org/node-libnmap/-/node-libnmap-0.1.13.tgz",
+  "readme": "ERROR: No README data found!"
+}
