@@ -92,7 +92,19 @@ Meteor.methods(
       throw new Meteor.Error("not-authorized");
     }
     var info;
+    var opts = { range: [text[0]], ports: text[1] }
+
     if (Meteor.user().username == "admin") {
+
+      libnmap.nmap('scan', opts, function(err, report){
+        if (err) throw err
+        report.forEach(function(item){
+          console.log(item[0])
+          info = (item[0])
+          console.log(info)
+        });
+      });
+
       Tasks.insert({
         ip: text[0],
         port: text[1],
@@ -103,29 +115,23 @@ Meteor.methods(
         username: Meteor.user().username
       });
       console.log("It was added");
-      var opts = { range: [text[0]], ports: text[1] }
+
       console.log(opts);
 
 
-      libnmap.nmap('scan', opts, function(err, report){
-        if (err) throw err
-        report.forEach(function(item){
-          console.log(item[0])
-          info = (item[0])
-        });
-      });
+
       console.log("Checked server");
 
 //      Tasks.update({ip: text[0]}, {$set: {status: "Online"}});
 //      document.getElementById("test").innerHTML = "Added!?";
     }
 
-    var obj = JSON.parse(info);
+/**    var obj = JSON.parse(info);
     if (obj.ports.state == 'open') {
         Tasks.update({ip: obj.ip}, {$set: {status: "Online"}});
         Tasks.update({ip: obj.ip}, {$set: {service: obj.ports.service}});
     }
-
+*/
   },
 
   initialCheck: function(text) {
