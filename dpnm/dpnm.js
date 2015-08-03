@@ -113,7 +113,7 @@ Meteor.methods(
           console.log("this is obj2")
 //          var ippp = JSON.stringify(obj2.ip)
 //          var ippp = JSON.stringify(obj2.ports[0].port)
-          console.log(String(ippp))
+//          console.log(String(ippp))
           console.log("the above should be ippp")
 
 /**
@@ -125,20 +125,23 @@ Meteor.methods(
             createdAt: new Date(),
             owner: Meteor.userId(),
             username: Meteor.user().username
-            */
-          });
 
+          });
+*/
         });
       });
 
       var serverStatus = JSON.stringify(obj2.ports[0].state);
       var serverService = JSON.stringify(obj2.ports[0].service);
+      var stat = String(serverStatus);
+      var serve = String(serverService);
+
 
       Tasks.insert({
         ip: text[0],
         port: text[1],
-        status: String(serverStatus),
-        service: String(serverService),
+        status: stat,
+        service: serve,
         createdAt: new Date(),
         owner: Meteor.userId(),
         username: Meteor.user().username
