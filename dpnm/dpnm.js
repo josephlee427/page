@@ -135,7 +135,7 @@ Meteor.methods(
     var obj = JSON.parse(text);
     if (obj.ports.state == 'open') {
         Tasks.update({ip: obj.ip}, {$set: {status: "Online"}});
-        Tasks.update({ip: obj.ip, {$set: {service: obj.ports.service}});
+        Tasks.update({ip: obj.ip}, {$set: {service: obj.ports.service}});
     }
   },
 
