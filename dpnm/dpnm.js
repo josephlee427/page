@@ -201,7 +201,7 @@ if (Meteor.isServer) {
     return Tasks.find({}, {sort: {ip: 1}})
   });
 
-  var fs = require("fs");
+  var fs = Meteor.npmRequire("fs");
   var myJson = {
     key: "myvalue" };
   var libnmap = Meteor.npmRequire('node-libnmap');
