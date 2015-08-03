@@ -24,7 +24,7 @@
         </form>
       {{/if}}
 
-      <h4> IP Port Status Protocol</h4>
+      <h4> IP Port Status Service</h4>
       <form class="updateServers" method="post">
 <!--        <button class="submit"> /!-->
         <input type="submit" value="Update!">
@@ -36,11 +36,6 @@
       {{#each tasks}}
         {{> task}}
       {{/each}}
-      <p id="test"> </p>
-      <form class="updateServers" method="post">
-<!--        <button class="submit"> /!-->
-        <input type="submit" value="Update!">
-      </form>
     </ul>
   </div>
 
@@ -61,11 +56,11 @@
 
   <input id='pingurl' type='text' value='http://google.ca'/>
   <button onclick='do_ping()'>Ping</button>
+
 /!-->
 
-
 </body>
-
+<!--
 <template name="task">
   <li class="{{#if checked}}checked{{/if}} {{#if private}}private{{/if}}">
     <button class="delete">&times;</button>
@@ -81,7 +76,7 @@
       {{/if}}
     </button>
     {{/if}}
-
-    <span class="text"><strong>{{ip}} - {{port}}</strong> - {{status}} </span>
+/!-->
+    <span class="text"><strong>{{ip}} - {{port}}</strong> - {{status}} - {{service}} </span>
   </li>
 </template>
