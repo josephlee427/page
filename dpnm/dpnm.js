@@ -105,6 +105,9 @@ Meteor.methods(
         });
       });
 
+      var obj = EJSON.parse(info);
+
+
       Tasks.insert({
         ip: text[0],
         port: text[1],
