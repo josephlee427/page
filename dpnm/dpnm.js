@@ -111,7 +111,11 @@ Meteor.methods(
           obj2 = JSON.parse(obj)
           console.log(obj2)
           console.log("this is obj2")
-          console.log(obj2.ports.state)
+//          var ippp = JSON.stringify(obj2.ip)
+//          var ippp = JSON.stringify(obj2.ports[0].port)
+          console.log(String(ippp))
+          console.log("the above should be ippp")
+
 /**
           Tasks.insert({
             ip: text[0],
@@ -127,11 +131,14 @@ Meteor.methods(
         });
       });
 
+      var serverStatus = JSON.stringify(obj2.ports[0].state);
+      var serverService = JSON.stringify(obj2.ports[0].service);
+
       Tasks.insert({
         ip: text[0],
         port: text[1],
-        status: "Offline",
-        service: "???",
+        status: String(serverStatus),
+        service: String(serverService),
         createdAt: new Date(),
         owner: Meteor.userId(),
         username: Meteor.user().username
