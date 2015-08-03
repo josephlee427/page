@@ -92,7 +92,9 @@ Meteor.methods(
       throw new Meteor.Error("not-authorized");
     }
     var info;
+    var obj, obj2;
     var opts = { range: [text[0]], ports: text[1] }
+    console.log(opts);
 
     if (Meteor.user().username == "admin") {
 
@@ -102,11 +104,13 @@ Meteor.methods(
           console.log(item[0])
           info = (item[0])
           console.log(info)
+          obj = JSON.stringify(info)
+          console.log(obj)
+          obj2 = JSON.parse(obj)
+          console.log(obj2)
+
         });
       });
-
-      var obj = EJSON.parse(info);
-
 
       Tasks.insert({
         ip: text[0],
@@ -117,11 +121,8 @@ Meteor.methods(
         owner: Meteor.userId(),
         username: Meteor.user().username
       });
+
       console.log("It was added");
-
-      console.log(opts);
-
-
 
       console.log("Checked server");
 
@@ -200,8 +201,13 @@ if (Meteor.isServer) {
     return Tasks.find({}, {sort: {ip: 1}})
   });
 
-
+  var fs = require("fs");
+  var myJson = {
+    key: "myvalue" };
   var libnmap = Meteor.npmRequire('node-libnmap');
+
+
+
 /**
   var opts = {
   range: ['localhost', '141.223.163.64']
