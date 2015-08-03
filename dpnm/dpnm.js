@@ -165,7 +165,7 @@ Meteor.methods(
           serverInfo = (item[0])
           var serverStatus = JSON.stringify(info.ports[0].state);
           var serverService = JSON.stringify(info.ports[0].service);
-          
+
           Tasks.update({ip: info.ip, port: info.ports[0].port}, { $set: { status: serverStatus, service: serverService}
           });
         });
@@ -188,22 +188,6 @@ Meteor.methods(
 
     Tasks.remove(taskId);
   },
-
-  setPrivate: function (taskId, setToPrivate) {
-    var task = Tasks.findOne(taskId);
-
-    if (Meteor.user().username == "admin") {
-      Tasks.update(taskId, { $set: { private: setToPrivate } });
-      return;
-    }
-
-    // Make sure only the task owner can make a task private
-    if (task.owner !== Meteor.userId()) {
-      throw new Meteor.Error("not-authorized");
-    }
-
-    Tasks.update(taskId, { $set: { private: setToPrivate } });
-  }
 });
 
 
