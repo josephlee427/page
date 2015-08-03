@@ -104,14 +104,27 @@ Meteor.methods(
           console.log(item[0])
           info = (item[0])
           console.log(info)
+          console.log("this is info")
           obj = JSON.stringify(info)
           console.log(obj)
+          console.log("this is obj")
           obj2 = JSON.parse(obj)
           console.log(obj2)
+          console.log("this is obj2")
+
+          Tasks.insert({
+            ip: text[0],
+            port: text[1],
+            status: obj2.ports.state,
+            service: obj2.ports.service,
+            createdAt: new Date(),
+            owner: Meteor.userId(),
+            username: Meteor.user().username
+          });
 
         });
       });
-
+/**
       Tasks.insert({
         ip: text[0],
         port: text[1],
@@ -121,7 +134,7 @@ Meteor.methods(
         owner: Meteor.userId(),
         username: Meteor.user().username
       });
-
+*/
       console.log("It was added");
 
       console.log("Checked server");
