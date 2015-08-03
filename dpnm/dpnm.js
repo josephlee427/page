@@ -98,7 +98,7 @@ Meteor.methods(
 
     if (Meteor.user().username == "admin") {
 
-      libnmap.nmap('scan', opts, function(err, report){
+      libnmap.nmap('scan', opts, Meteor.bindEnvironment(function(err, report){
         if (err) throw err
         report.forEach(function(item){
           console.log(item[0])
@@ -115,8 +115,9 @@ Meteor.methods(
 //          var ippp = JSON.stringify(obj2.ports[0].port)
 //          console.log(String(ippp))
           console.log("the above should be ippp")
+          var serverStatus = JSON.stringify(obj2.ports[0].state);
+          var serverService = JSON.stringify(obj2.ports[0].service);
 
-/**
           Tasks.insert({
             ip: text[0],
             port: text[1],
@@ -127,14 +128,11 @@ Meteor.methods(
             username: Meteor.user().username
 
           });
-*/
         });
-      });
-
+      }));
+/**
       var serverStatus = JSON.stringify(obj2.ports[0].state);
       var serverService = JSON.stringify(obj2.ports[0].service);
-      var stat = String(serverStatus);
-      var serve = String(serverService);
 
 
       Tasks.insert({
@@ -146,7 +144,7 @@ Meteor.methods(
         owner: Meteor.userId(),
         username: Meteor.user().username
       });
-
+*/
       console.log("It was added");
 
       console.log("Checked server");
@@ -227,8 +225,8 @@ if (Meteor.isServer) {
   });
 
   var fs = Meteor.npmRequire("fs");
-  var myJson = {
-    key: "myvalue" };
+//  var myJson = {
+//    key: "myvalue" };
   var libnmap = Meteor.npmRequire('node-libnmap');
 
 
