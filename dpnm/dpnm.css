@@ -53,7 +53,7 @@ form {
 
 h4 {
   word-spacing: 80px;
-  margin-left: 110px;
+  margin-left: 70px;
 }
 
 .new-task input {
@@ -94,7 +94,7 @@ li {
 }
 
 li .text {
-  margin-left: 10px;
+  margin-left: 20px;
 }
 
 li.checked {

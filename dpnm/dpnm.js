@@ -20,11 +20,11 @@ if (Meteor.isClient) {
         return Tasks.find({}, {sort: {ip: 1}});
     }
     },
-    hideOffline: function () {
+/**    hideOffline: function () {
       return Session.get("hideOffline");
-    },
+    },*/
     onlineServers: function () {
-      return Tasks.find({offline: {$ne: true}}).count();
+      return Tasks.find({status: {$ne: "closed"}}).count();
     },
   });
 
@@ -66,9 +66,6 @@ if (Meteor.isClient) {
     },
     "click .delete": function () {
       Meteor.call("deleteTask", this._id);
-    },
-    "click .toggle-private": function () {
-      Meteor.call("setPrivate", this._id, ! this.private);
     }
   });
 
@@ -121,8 +118,8 @@ Meteor.methods(
           Tasks.insert({
             ip: text[0],
             port: text[1],
-            status: obj2.ports.state,
-            service: obj2.ports.service,
+            status: serverStatus,
+            service: serverService,
             createdAt: new Date(),
             owner: Meteor.userId(),
             username: Meteor.user().username
@@ -130,6 +127,7 @@ Meteor.methods(
           });
         });
       }));
+    }
 /**
       var serverStatus = JSON.stringify(obj2.ports[0].state);
       var serverService = JSON.stringify(obj2.ports[0].service);
@@ -149,16 +147,6 @@ Meteor.methods(
 
       console.log("Checked server");
 
-//      Tasks.update({ip: text[0]}, {$set: {status: "Online"}});
-//      document.getElementById("test").innerHTML = "Added!?";
-    }
-
-/**    var obj = JSON.parse(info);
-    if (obj.ports.state == 'open') {
-        Tasks.update({ip: obj.ip}, {$set: {status: "Online"}});
-        Tasks.update({ip: obj.ip}, {$set: {service: obj.ports.service}});
-    }
-*/
   },
 
   initialCheck: function(text) {
