@@ -149,24 +149,27 @@ Meteor.methods(
 
   },
 
-  initialCheck: function(text) {
-    if (! Meteor.user()) {
-      throw new Meteor.Error("not-authorized");
-    }
-    var obj = JSON.parse(text);
-    if (obj.ports.state == 'open') {
-        Tasks.update({ip: obj.ip}, {$set: {status: "Online"}});
-        Tasks.update({ip: obj.ip}, {$set: {service: obj.ports.service}});
-    }
-  },
-
   updateServers: function () {
     if (! Meteor.user()) {
       throw new Meteor.Error("not-authorized");
     }
-    var List = { range: Tasks.distinct("ip") }
-    document.write(List);
 
+    var opts, serverInfo;
+
+    var cursor = Tasks.find({});
+    cursor.forEach(function (info) {
+      opts = { range: [info.ip], ports: info.ports[0].port }
+      libnmap.nmap('scan', opts, Meteor.bindEnvironment(function(err, report){
+        if (err) throw err
+        report.forEach(function(item) {
+          serverInfo = (item[0])
+          var serverStatus = JSON.stringify(info.ports[0].state);
+          var serverService = JSON.stringify(info.ports[0].service);
+          
+          Tasks.update({ip: info.ip, port: info.ports[0].port}, { $set: { status: serverStatus, service: serverService}
+          });
+        });
+    }));
 
   },
   deleteTask: function (taskId) {
@@ -213,8 +216,6 @@ if (Meteor.isServer) {
   });
 
   var fs = Meteor.npmRequire("fs");
-//  var myJson = {
-//    key: "myvalue" };
   var libnmap = Meteor.npmRequire('node-libnmap');
 
 
