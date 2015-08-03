@@ -112,7 +112,6 @@ Meteor.methods(
         report.forEach(function(item){
           console.log(item[0])
           info = (item[0])
-          Meteor.call("initialCheck", info);
         });
       });
       console.log("Checked server");
@@ -121,16 +120,22 @@ Meteor.methods(
 //      document.getElementById("test").innerHTML = "Added!?";
     }
 
+    var obj = JSON.parse(info);
+    if (obj.ports.state == 'open') {
+        Tasks.update({ip: obj.ip}, {$set: {status: "Online"}});
+        Tasks.update({ip: obj.ip}, {$set: {service: obj.ports.service}});
+    }
+
   },
 
   initialCheck: function(text) {
     if (! Meteor.user()) {
       throw new Meteor.Error("not-authorized");
     }
-    var obj = JSON.parse(info);
+    var obj = JSON.parse(text);
     if (obj.ports.state == 'open') {
-        Tasks.update({ip: text[0]}, {$set: {status: "Online"}});
-        Tasks.update({ip: text[0]}, {$set: {service: obj.ports.service}});
+        Tasks.update({ip: obj.ip}, {$set: {status: "Online"}});
+        Tasks.update({ip: obj.ip, {$set: {service: obj.ports.service}});
     }
   },
 
