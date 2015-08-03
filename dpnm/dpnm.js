@@ -132,7 +132,7 @@ Meteor.methods(
         Tasks.update({ip: text[0]}, {$set: {status: "Online"}});
         Tasks.update({ip: text[0]}, {$set: {service: obj.ports.service}});
     }
-  }
+  },
 
   updateServers: function () {
     if (! Meteor.user()) {
