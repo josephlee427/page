@@ -29,15 +29,12 @@
   "dependencies": {
     "netmask": "~1.0.4",
     "async": "~0.2.10",
-    "ipv6": "~3.1.1",
     "redis": "0.8.2",
     "github": "0.1.8",
     "request":"~2.12.0",
     "nodemailer":"0.3.x"
   },
   "devDependencies": {
-    "mocha": "~1.17.0",
-    "chai": "~1.8.1"
   },
   "license": "MIT",
   "engine": "node >= v0.11.*",
