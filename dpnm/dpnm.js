@@ -164,7 +164,7 @@ Meteor.methods(
 
       transporter.sendMail({
         from: 'josephl@live.ca',
-        to: 'josephl@live.ca',
+        to: 'throwaway42794@gmail.com',
         subject: "'" + String(info.ip) + "' has gone down.",
         text: 'See subject title!'
       });
