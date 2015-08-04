@@ -9,7 +9,6 @@ if (Meteor.isClient) {
   // This code only runs on the client
 
   Meteor.subscribe("tasks");    // Set the client to read the database
-  console.log("calling monitor");
 
   Template.body.helpers({
     tasks: function () {
@@ -201,13 +200,28 @@ if (Meteor.isServer) {
   });
 
   var libnmap = Meteor.npmRequire('node-libnmap');  // for libnmap package
-  Meteor.startup(function () {
+/**  Meteor.startup(function () {
     Meteor.setInterval(function () {
         Meteor.call("updateServers")
       },  5000)});    // 600000 = 10 minutes
+*/
+  SyncedCron.add({
+    name: 'Periodically check the DP&NM servers',
+    schedule: function(parser) {
+      // parser is a later.parse object
+      return parser.text('every 3 seconds');
+    },
+    job: function(updateServers) {
+      console.log("is it the interval i see?");
+    }
+  });
 
+  Meteor.startup(function () {
+    // code to run on server at startup
+    SyncedCron.start();
+  });
 
-
+}
 /** Testing cases, insert in nodejs to find info
   var opts = {
   range: ['localhost', '141.223.163.64']
@@ -219,5 +233,3 @@ libnmap.nmap('scan', opts, function(err, report){
     console.log(item[0])
   });
 }); */
-
-}
