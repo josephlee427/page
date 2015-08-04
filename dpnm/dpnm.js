@@ -9,6 +9,7 @@ if (Meteor.isClient) {
   // This code only runs on the client
 
   Meteor.subscribe("tasks");    // Set the client to read the database
+  console.log("calling monitor");
   Meteor.call("monitor", 5000); // 600000 = 10 minutes
   Template.body.helpers({
     tasks: function () {
@@ -188,7 +189,7 @@ Meteor.methods(
   },
 
   monitor: function (time) {
-    Meteor.setInterval(Meteor.bindEnvironment(Meteor.call("updateServers"), time), report);
+    Meteor.setInterval(Meteor.bindEnvironment(Meteor.call("updateServers")), time);
   }
 });
 
