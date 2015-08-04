@@ -16,3 +16,4 @@ json
 ejson
 mrt:meteor-nodemailer
 email
+percolate:synced-cron
