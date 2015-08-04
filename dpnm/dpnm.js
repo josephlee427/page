@@ -73,7 +73,9 @@ if (Meteor.isClient) {
 }
 
 function updateServers() {
-
+    if (! Meteor.user()) {
+      throw new Meteor.Error("not-authorized");
+    }
     var opts, serverInfo;
     console.log("middle of updateServers");
     var cursor = Tasks.find({});
@@ -102,13 +104,13 @@ function updateServers() {
         });
       });
 
-      if (serverInfo.ports[0].state == "closed") {  // If server is down, send mail
+//      if (serverInfo.ports[0].state == "closed") {  // If server is down, send mail
       Email.send({to: 'josephl@live.ca',      // Can change email to anything
                   from: 'throwaway42794@gmail.com',
                   subject: info.ip + " has gone down (port:  " + info.port + ").",
                   text: "Read subject!"
       });
-    }
+  //  }
 
     }));
   });
@@ -202,7 +204,7 @@ if (Meteor.isServer) {
       name: 'Periodically check the DP&NM servers',
       schedule: function(parser) {
         // parser is a later.parse object
-        return parser.text('every 3 seconds');
+        return parser.text('every 15 seconds');
       },
       job: function() {
         console.log("about to run updateServers");
