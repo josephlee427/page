@@ -189,11 +189,8 @@ Meteor.methods(
 
   monitor: function (time) {
     Meteor.setInterval(Meteor.call("updateServers"), time);
-  },
-
+  }
 });
-
-
 
 
 if (Meteor.isServer) {
