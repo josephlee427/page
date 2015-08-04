@@ -10,7 +10,7 @@ if (Meteor.isClient) {
 
   Meteor.subscribe("tasks");    // Set the client to read the database
   console.log("calling monitor");
-  Meteor.call("monitor", 5000); // 600000 = 10 minutes
+
   Template.body.helpers({
     tasks: function () {
       if (Session.get("hideOffline")) {
@@ -189,7 +189,7 @@ Meteor.methods(
   },
 
   monitor: function (time) {
-    Meteor.setInterval(Meteor.bindEnvironment(Meteor.call("updateServers")), time);
+    Meteor.setInterval((Meteor.bindEnvironment(err, (Meteor.call("updateServers")))), time);
   }
 });
 
@@ -202,7 +202,7 @@ if (Meteor.isServer) {
 
   var libnmap = Meteor.npmRequire('node-libnmap');  // for libnmap package
 
-
+  Meteor.call("monitor", 5000); // 600000 = 10 minutes
 
 
 
