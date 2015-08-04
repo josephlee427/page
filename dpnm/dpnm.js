@@ -99,25 +99,23 @@ Meteor.methods(
           console.log(item[0])
           info = (item[0])
           console.log(info)
-          console.log("this is info")
+/**       console.log("this is info")
           obj = JSON.stringify(info)
           console.log(obj)
           console.log("this is obj")
           obj2 = JSON.parse(obj)
           console.log(obj2)
           console.log("this is obj2")
-//          var ippp = JSON.stringify(obj2.ip)
-//          var ippp = JSON.stringify(obj2.ports[0].port)
-//          console.log(String(ippp))
-          console.log("the above should be ippp")
-          var serverStatus = JSON.stringify(obj2.ports[0].state);
-          var serverService = JSON.stringify(obj2.ports[0].service);
+          var ippp = JSON.stringify(obj2.ip)
+          var ippp = JSON.stringify(obj2.ports[0].port)
+          console.log(String(ippp))
+          console.log("the above should be ippp") */
 
           Tasks.insert({
             ip: text[0],
             port: text[1],
-            status: serverStatus,
-            service: serverService,
+            status: info.ports[0].state,
+            service: info.ports[0].service,
             createdAt: new Date(),
             owner: Meteor.userId(),
             username: Meteor.user().username
@@ -126,23 +124,7 @@ Meteor.methods(
         });
       }));
     }
-/**
-      var serverStatus = JSON.stringify(obj2.ports[0].state);
-      var serverService = JSON.stringify(obj2.ports[0].service);
-
-
-      Tasks.insert({
-        ip: text[0],
-        port: text[1],
-        status: stat,
-        service: serve,
-        createdAt: new Date(),
-        owner: Meteor.userId(),
-        username: Meteor.user().username
-      });
-*/
       console.log("It was added");
-
       console.log("Checked server");
 
   },
@@ -156,16 +138,27 @@ Meteor.methods(
 
     var cursor = Tasks.find({});
     cursor.forEach(function (info) {
-      opts = { range: [info.ip], ports: info.ports[0].port }
+      console.log(info)
+      console.log("info ^^")
+      console.log(info.ip)
+      console.log(info.port)
+      opts = { range: [String(info.ip)], ports: String(info.port) }
+      console.log(opts)
+      console.log("opts is above this")
+
       libnmap.nmap('scan', opts, Meteor.bindEnvironment(function(err, report){
         if (err) throw err
         report.forEach(function(item) {
-          serverInfo = (item[0])
-          var serverStatus = JSON.stringify(info.ports[0].state);
-          var serverService = JSON.stringify(info.ports[0].service);
+        serverInfo = (item[0])
+        console.log(info.status)
+        console.log(info.service)
 
-          Tasks.update({ip: info.ip, port: info.ports[0].port}, { $set: { status: serverStatus, service: serverService}
-          });
+        Tasks.update({ip: info.ip, port: info.port}, {
+          $set:
+          {
+            status: serverInfo.ports[0].state,
+            service: serverInfo.ports[0].service
+          }
         });
     }));
   });
