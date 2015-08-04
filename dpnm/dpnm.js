@@ -131,7 +131,7 @@ Meteor.methods(
     }
 
     var opts, serverInfo;
-
+    console.log("hey its the interval!");
     var cursor = Tasks.find({});
     cursor.forEach(function (info) {
 /**      console.log(info)
@@ -187,6 +187,10 @@ Meteor.methods(
     Tasks.remove(taskId);
   },
 
+  monitor: function (time) {
+    Meteor.setInterval(Meteor.call("updateServers"), time);
+  },
+
 });
 
 
@@ -199,6 +203,9 @@ if (Meteor.isServer) {
   });
 
   var libnmap = Meteor.npmRequire('node-libnmap');  // for libnmap package
+
+  Meteor.call("monitor", 5000); // 600000 = 10 minutes
+
 
 
 /** Testing cases, insert in nodejs to find info
