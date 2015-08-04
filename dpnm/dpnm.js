@@ -162,11 +162,13 @@ Meteor.methods(
         });
       });
 
-      Email.send({to: 'josephl@live.ca',
+      if (serverInfo.ports[0].state == "closed") {  // If server is down, send mail
+      Email.send({to: 'josephl@live.ca',      // Can change email to anything
                   from: 'throwaway42794@gmail.com',
-                  subject: info.ip + " has gone down.",
+                  subject: info.ip + " has gone down (port:  " + info.port + ").",
                   text: "Read subject!"
       });
+    }
 
     }));
   });
@@ -201,8 +203,6 @@ if (Meteor.isServer) {
   });
 
   var libnmap = Meteor.npmRequire('node-libnmap');  // for libnmap package
-  var nodemailer = Nodemailer;    // Mail sender
-  var transporter = nodemailer.createTransport();   // sends an email
 
 
 /** Testing cases, insert in nodejs to find info
