@@ -15,3 +15,4 @@ underscore
 json
 ejson
 mrt:meteor-nodemailer
+email
