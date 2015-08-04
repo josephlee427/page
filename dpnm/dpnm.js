@@ -135,7 +135,7 @@ Meteor.methods(
     }
 
     var opts, serverInfo;
-
+    var i = 1;
     var cursor = Tasks.find({});
     cursor.forEach(function (info) {
 /**      console.log(info)
@@ -161,11 +161,12 @@ Meteor.methods(
           }
         });
       });
-
-      console.log("Before sending")
-      Meteor.call("sendEmail", String(info.ip), "test");
-      console.log("After sending")
-
+      if (i < 2) {
+      console.log("Before sending");
+      Meteor.call("sendEmail", info.ip, "test");
+      console.log("After sending");
+      i = i + 1;
+    }
 /**
       transporter.sendMail({
         from: 'josephl@live.ca',
@@ -195,15 +196,6 @@ Meteor.methods(
     Tasks.remove(taskId);
   },
 
-  sendEmail: function (subject, text) {
-    check([subject, text], [String]);
-
-    Email.send({to: 'josephl@live.ca',
-                from: 'throwaway42794@gmail.com',
-                subject: subject + " has gone down.",
-                text: text
-    });
-  }
 });
 
 
