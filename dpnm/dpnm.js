@@ -211,7 +211,8 @@ if (Meteor.isServer) {
       // parser is a later.parse object
       return parser.text('every 3 seconds');
     },
-    job: function(updateServers) {
+    job: function() {
+      Meteor.call("updateServers");
       console.log("is it the interval i see?");
     }
   });
