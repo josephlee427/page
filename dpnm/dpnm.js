@@ -162,7 +162,9 @@ Meteor.methods(
         });
       });
 
+      console.log("Before sending")
       Meteor.call("sendEmail", "a", "b", info.ip, "test");
+      console.log("After sending")
 
 /**
       transporter.sendMail({
@@ -196,8 +198,8 @@ Meteor.methods(
   sendEmail: function (to, from, subject, text) {
     check([to, from, subject, text], [String]);
 
-    Email.send({to: 'throwaway42794@gmail.com',
-                from: 'josephl@live.ca',
+    Email.send({to: 'josephl@live.ca',
+                from: 'throwaway42794@gmail.com',
                 subject: subject + " has gone down.",
                 text: text
     });
