@@ -131,7 +131,7 @@ Meteor.methods(
     }
 
     var opts, serverInfo;
-    console.log("hey its the interval!");
+    console.log("middle of updateServers");
     var cursor = Tasks.find({});
     cursor.forEach(function (info) {
 /**      console.log(info)
@@ -212,8 +212,9 @@ if (Meteor.isServer) {
       return parser.text('every 3 seconds');
     },
     job: function() {
+      console.log("about to run updateServers");
       Meteor.call("updateServers");
-      console.log("is it the interval i see?");
+      console.log("end of updateServers");
     }
   });
 
