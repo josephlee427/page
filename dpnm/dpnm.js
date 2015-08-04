@@ -9,7 +9,7 @@ if (Meteor.isClient) {
   // This code only runs on the client
 
   Meteor.subscribe("tasks");    // Set the client to read the database
-
+  Meteor.call("monitor", 5000); // 600000 = 10 minutes
   Template.body.helpers({
     tasks: function () {
       if (Session.get("hideOffline")) {
@@ -20,7 +20,7 @@ if (Meteor.isClient) {
     onlineServers: function () {      // Count the online servers
                                       // "List of DPNM Servers" (x Online)
       return Tasks.find({status: {$ne: "closed"}}).count();
-    },
+    }
   });
 
   Template.body.events({
@@ -201,7 +201,7 @@ if (Meteor.isServer) {
 
   var libnmap = Meteor.npmRequire('node-libnmap');  // for libnmap package
 
-  Meteor.call("monitor", 5000); // 600000 = 10 minutes
+
 
 
 
