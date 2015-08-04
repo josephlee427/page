@@ -14,3 +14,4 @@ npm-container
 underscore
 json
 ejson
+mrt:meteor-nodemailer
