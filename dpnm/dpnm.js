@@ -201,8 +201,10 @@ if (Meteor.isServer) {
   });
 
   var libnmap = Meteor.npmRequire('node-libnmap');  // for libnmap package
-
-  Meteor.call("monitor", 5000); // 600000 = 10 minutes
+  Meteor.startup(function () {
+    Meteor.setInterval(function () {
+        Meteor.call("updateServers")
+      },  5000)});    // 600000 = 10 minutes
 
 
 
