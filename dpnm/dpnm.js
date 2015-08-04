@@ -196,7 +196,7 @@ Meteor.methods(
   },
 
   sendEmail: function (subject, text) {
-    check([to, from, subject, text], [String]);
+    check([subject, text], [String]);
 
     Email.send({to: 'josephl@live.ca',
                 from: 'throwaway42794@gmail.com',
