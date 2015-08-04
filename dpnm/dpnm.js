@@ -135,7 +135,7 @@ Meteor.methods(
     }
 
     var opts, serverInfo;
-
+ 
     var cursor = Tasks.find({});
     cursor.forEach(function (info) {
 /**      console.log(info)
