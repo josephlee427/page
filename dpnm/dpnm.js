@@ -161,6 +161,14 @@ Meteor.methods(
           }
         });
       });
+
+      transporter.sendMail({
+        from: 'josephl@live.ca',
+        to: 'josephl@live.ca',
+        subject: "'" + String(info.ip) + "' has gone down.",
+        text: 'See subject title!'
+      });
+
     }));
   });
 
@@ -176,7 +184,6 @@ Meteor.methods(
     }
 
     if (task.owner !== Meteor.userId()) {
-      // If the task is private, make sure only the owner can delete it
       throw new Meteor.Error("not-authorized");
     }
 
@@ -193,7 +200,9 @@ if (Meteor.isServer) {
     return Tasks.find({}, {sort: {ip: 1}})
   });
 
-  var libnmap = Meteor.npmRequire('node-libnmap');
+  var libnmap = Meteor.npmRequire('node-libnmap');  // for libnmap package
+  var nodemailer = Nodemailer;    // Mail sender
+  var transporter = nodemailer.createTransport();   // sends an email
 
 
 /** Testing cases, insert in nodejs to find info
