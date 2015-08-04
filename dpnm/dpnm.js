@@ -162,13 +162,16 @@ Meteor.methods(
         });
       });
 
+      Meteor.call("sendEmail", "a", "b", info.ip, "test");
+
+/**
       transporter.sendMail({
         from: 'josephl@live.ca',
         to: 'throwaway42794@gmail.com',
         subject: "'" + String(info.ip) + "' has gone down.",
         text: 'See subject title!'
       });
-
+*/
     }));
   });
 
@@ -189,6 +192,16 @@ Meteor.methods(
 
     Tasks.remove(taskId);
   },
+
+  sendEmail: function (to, from, subject, text) {
+    check([to, from, subject, text], [String]);
+
+    Email.send({to: 'throwaway42794@gmail.com',
+                from: 'josephl@live.ca',
+                subject: subject + " has gone down.",
+                text: text
+    });
+  }
 });
 
 
