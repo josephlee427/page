@@ -138,20 +138,20 @@ Meteor.methods(
 
     var cursor = Tasks.find({});
     cursor.forEach(function (info) {
-      console.log(info)
+/**      console.log(info)
       console.log("info ^^")
       console.log(info.ip)
-      console.log(info.port)
+      console.log(info.port) */
       opts = { range: [String(info.ip)], ports: String(info.port) }
-      console.log(opts)
-      console.log("opts is above this")
+//      console.log(opts)
+//      console.log("opts is above this")
 
       libnmap.nmap('scan', opts, Meteor.bindEnvironment(function(err, report){
         if (err) throw err
         report.forEach(function(item) {
         serverInfo = (item[0])
-        console.log(info.status)
-        console.log(info.service)
+//        console.log(info.status)
+//        console.log(info.service)
 
         Tasks.update({ip: info.ip, port: info.port}, {
           $set:
@@ -160,9 +160,12 @@ Meteor.methods(
             service: serverInfo.ports[0].service
           }
         });
+      });
     }));
   });
-},
+
+  },
+
   deleteTask: function (taskId) {
 
     var task = Tasks.findOne(taskId);
@@ -190,12 +193,10 @@ if (Meteor.isServer) {
     return Tasks.find({}, {sort: {ip: 1}})
   });
 
-  var fs = Meteor.npmRequire("fs");
   var libnmap = Meteor.npmRequire('node-libnmap');
 
 
-
-/**
+/** Testing cases, insert in nodejs to find info
   var opts = {
   range: ['localhost', '141.223.163.64']
 }
