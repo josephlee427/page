@@ -163,7 +163,7 @@ Meteor.methods(
       });
 
       console.log("Before sending")
-      Meteor.call("sendEmail", "a", "b", info.ip, "test");
+      Meteor.call("sendEmail", String(info.ip), "test");
       console.log("After sending")
 
 /**
@@ -195,7 +195,7 @@ Meteor.methods(
     Tasks.remove(taskId);
   },
 
-  sendEmail: function (to, from, subject, text) {
+  sendEmail: function (subject, text) {
     check([to, from, subject, text], [String]);
 
     Email.send({to: 'josephl@live.ca',
