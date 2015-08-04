@@ -87,7 +87,7 @@ Meteor.methods(
       throw new Meteor.Error("not-authorized");
     }
     var info;
-    var obj, obj2;
+//    var obj, obj2;
     var opts = { range: [text[0]], ports: text[1] }
     console.log(opts);
 
@@ -127,10 +127,6 @@ Meteor.methods(
       console.log("It was added");
       console.log("Checked server");
 
-      console.log("Before sending");
-      Meteor.call("sendEmail", "testing", "test");
-      console.log("After sending");
-
   },
 
   updateServers: function () {
@@ -166,14 +162,12 @@ Meteor.methods(
         });
       });
 
-/**
-      transporter.sendMail({
-        from: 'josephl@live.ca',
-        to: 'throwaway42794@gmail.com',
-        subject: "'" + String(info.ip) + "' has gone down.",
-        text: 'See subject title!'
+      Email.send({to: 'josephl@live.ca',
+                  from: 'throwaway42794@gmail.com',
+                  subject: info.ip + " has gone down.",
+                  text: "Read subject!"
       });
-*/
+
     }));
   });
 
