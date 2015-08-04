@@ -1,16 +1,14 @@
-Tasks = new Mongo.Collection("tasks");
+Tasks = new Mongo.Collection("tasks");    // Initialize the database
 
 Handlebars.registerHelper("isNull", function(value) {
-  return value === null;
+  return value === null;    // Helper to see if a value is null
 });
 
 
-
 if (Meteor.isClient) {
-
-
   // This code only runs on the client
-  Meteor.subscribe("tasks");
+
+  Meteor.subscribe("tasks");    // Set the client to read the database
 
   Template.body.helpers({
     tasks: function () {
@@ -18,30 +16,27 @@ if (Meteor.isClient) {
         return Tasks.find({offline: {$ne: true}}, {sort: {ip: 1}});
       } else {
         return Tasks.find({}, {sort: {ip: 1}});
-    }
-    },
-/**    hideOffline: function () {
-      return Session.get("hideOffline");
-    },*/
-    onlineServers: function () {
+    }},
+    onlineServers: function () {      // Count the online servers
+                                      // "List of DPNM Servers" (x Online)
       return Tasks.find({status: {$ne: "closed"}}).count();
     },
   });
 
   Template.body.events({
     "submit .new-task": function (event) {
-      // This function is called when the new task form is submitted
+      // This function is called when the new server form is submitted
       var port, ip;
 
       if ((ip = event.target.serverIP.value) === "") {
-        return false;
+        return false;       // Prevent empty form
       }
 
       if ((port = event.target.serverPort.value) === "") {
         return false;
       }
 
-      Meteor.call("addTask", [ip, port]);
+      Meteor.call("addTask", [ip, port]);   // Run the form into the database
 
       // Clear form
       event.target.serverIP.value = "";
@@ -64,6 +59,7 @@ if (Meteor.isClient) {
       // Set the checked property to the opposite of its current value
       Meteor.call("setChecked", this._id, ! this.checked);
     },
+    // Delete server info from database with a click
     "click .delete": function () {
       Meteor.call("deleteTask", this._id);
     }
@@ -75,7 +71,7 @@ if (Meteor.isClient) {
     }
   });
 
-  Accounts.ui.config({
+  Accounts.ui.config({        // Users setup
     passwordSignupFields: "USERNAME_ONLY"
   });
 }
@@ -83,6 +79,8 @@ if (Meteor.isClient) {
 Meteor.methods(
 
 {
+  // Add a server into the database and check the status of it
+
   addTask: function (text) {
     // Make sure the user is logged in before inserting a task
     if (! Meteor.user()) {
@@ -170,8 +168,8 @@ Meteor.methods(
           });
         });
     }));
-
-  },
+  });
+},
   deleteTask: function (taskId) {
 
     var task = Tasks.findOne(taskId);
