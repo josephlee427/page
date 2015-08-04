@@ -127,6 +127,10 @@ Meteor.methods(
       console.log("It was added");
       console.log("Checked server");
 
+      console.log("Before sending");
+      Meteor.call("sendEmail", "testing", "test");
+      console.log("After sending");
+
   },
 
   updateServers: function () {
@@ -135,7 +139,7 @@ Meteor.methods(
     }
 
     var opts, serverInfo;
-    var i = 1;
+
     var cursor = Tasks.find({});
     cursor.forEach(function (info) {
 /**      console.log(info)
@@ -161,12 +165,7 @@ Meteor.methods(
           }
         });
       });
-      if (i < 2) {
-      console.log("Before sending");
-      Meteor.call("sendEmail", info.ip, "test");
-      console.log("After sending");
-      i = i + 1;
-    }
+
 /**
       transporter.sendMail({
         from: 'josephl@live.ca',
