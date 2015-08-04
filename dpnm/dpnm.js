@@ -9,7 +9,23 @@ if (Meteor.isClient) {
   // This code only runs on the client
 
   Meteor.subscribe("tasks");    // Set the client to read the database
+  SyncedCron.add({
+    name: 'Periodically check the DP&NM servers',
+    schedule: function(parser) {
+      // parser is a later.parse object
+      return parser.text('every 3 seconds');
+    },
+    job: function() {
+      console.log("about to run updateServers");
+      Meteor.call("updateServers");
+      console.log("end of updateServers");
+    }
+  });
 
+  Meteor.startup(function () {
+    // code to run on server at startup
+    SyncedCron.start();
+  });
   Template.body.helpers({
     tasks: function () {
       if (Session.get("hideOffline")) {
@@ -205,23 +221,7 @@ if (Meteor.isServer) {
         Meteor.call("updateServers")
       },  5000)});    // 600000 = 10 minutes
 */
-  SyncedCron.add({
-    name: 'Periodically check the DP&NM servers',
-    schedule: function(parser) {
-      // parser is a later.parse object
-      return parser.text('every 3 seconds');
-    },
-    job: function() {
-      console.log("about to run updateServers");
-      Meteor.call("updateServers");
-      console.log("end of updateServers");
-    }
-  });
 
-  Meteor.startup(function () {
-    // code to run on server at startup
-    SyncedCron.start();
-  });
 
 }
 /** Testing cases, insert in nodejs to find info
