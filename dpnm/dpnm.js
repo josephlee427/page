@@ -72,6 +72,50 @@ if (Meteor.isClient) {
   });
 }
 
+function updateServers() {
+
+    var opts, serverInfo;
+    console.log("middle of updateServers");
+    var cursor = Tasks.find({});
+    cursor.forEach(function (info) {
+/**      console.log(info)
+      console.log("info ^^")
+      console.log(info.ip)
+      console.log(info.port) */
+      opts = { range: [String(info.ip)], ports: String(info.port) }
+//      console.log(opts)
+//      console.log("opts is above this")
+
+      libnmap.nmap('scan', opts, Meteor.bindEnvironment(function(err, report){
+        if (err) throw err
+        report.forEach(function(item) {
+        serverInfo = (item[0])
+//        console.log(info.status)
+//        console.log(info.service)
+
+        Tasks.update({ip: info.ip, port: info.port}, {
+          $set:
+          {
+            status: serverInfo.ports[0].state,
+            service: serverInfo.ports[0].service
+          }
+        });
+      });
+
+      if (serverInfo.ports[0].state == "closed") {  // If server is down, send mail
+      Email.send({to: 'josephl@live.ca',      // Can change email to anything
+                  from: 'throwaway42794@gmail.com',
+                  subject: info.ip + " has gone down (port:  " + info.port + ").",
+                  text: "Read subject!"
+      });
+    }
+
+    }));
+  });
+
+}
+
+
 Meteor.methods(
 
 {
@@ -124,52 +168,7 @@ Meteor.methods(
       console.log("Checked server");
 
   },
-
-  updateServers: function () {
-    if (! Meteor.user()) {
-      throw new Meteor.Error("not-authorized");
-    }
-
-    var opts, serverInfo;
-    console.log("middle of updateServers");
-    var cursor = Tasks.find({});
-    cursor.forEach(function (info) {
-/**      console.log(info)
-      console.log("info ^^")
-      console.log(info.ip)
-      console.log(info.port) */
-      opts = { range: [String(info.ip)], ports: String(info.port) }
-//      console.log(opts)
-//      console.log("opts is above this")
-
-      libnmap.nmap('scan', opts, Meteor.bindEnvironment(function(err, report){
-        if (err) throw err
-        report.forEach(function(item) {
-        serverInfo = (item[0])
-//        console.log(info.status)
-//        console.log(info.service)
-
-        Tasks.update({ip: info.ip, port: info.port}, {
-          $set:
-          {
-            status: serverInfo.ports[0].state,
-            service: serverInfo.ports[0].service
-          }
-        });
-      });
-
-      if (serverInfo.ports[0].state == "closed") {  // If server is down, send mail
-      Email.send({to: 'josephl@live.ca',      // Can change email to anything
-                  from: 'throwaway42794@gmail.com',
-                  subject: info.ip + " has gone down (port:  " + info.port + ").",
-                  text: "Read subject!"
-      });
-    }
-
-    }));
-  });
-
-  },
+// PLACE HOLDER
 
   deleteTask: function (taskId) {
 
@@ -199,29 +198,32 @@ if (Meteor.isServer) {
     return Tasks.find({}, {sort: {ip: 1}})
   });
 
+  SyncedCron.add({
+      name: 'Periodically check the DP&NM servers',
+      schedule: function(parser) {
+        // parser is a later.parse object
+        return parser.text('every 3 seconds');
+      },
+      job: function() {
+        console.log("about to run updateServers");
+        updateServers();
+        console.log("end of updateServers");
+      }
+    });
+
+  Meteor.startup(function () {
+      // code to run on server at startup
+      SyncedCron.start();
+  });
+
+
   var libnmap = Meteor.npmRequire('node-libnmap');  // for libnmap package
 /**  Meteor.startup(function () {
     Meteor.setInterval(function () {
         Meteor.call("updateServers")
       },  5000)});    // 600000 = 10 minutes
 */
-  SyncedCron.add({
-    name: 'Periodically check the DP&NM servers',
-    schedule: function(parser) {
-      // parser is a later.parse object
-      return parser.text('every 3 seconds');
-    },
-    job: function() {
-      console.log("about to run updateServers");
-      Meteor.call("updateServers");
-      console.log("end of updateServers");
-    }
-  });
 
-  Meteor.startup(function () {
-    // code to run on server at startup
-    SyncedCron.start();
-  });
 
 }
 /** Testing cases, insert in nodejs to find info
