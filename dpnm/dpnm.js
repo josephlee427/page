@@ -73,9 +73,7 @@ if (Meteor.isClient) {
 }
 
 function updateServers() {
-    if (! Meteor.user()) {
-      throw new Meteor.Error("not-authorized");
-    }
+
     var opts, serverInfo;
     console.log("middle of updateServers");
     var cursor = Tasks.find({});
@@ -104,13 +102,13 @@ function updateServers() {
         });
       });
 
-//      if (serverInfo.ports[0].state == "closed") {  // If server is down, send mail
-      Email.send({to: 'josephl@live.ca',      // Can change email to anything
+      if (serverInfo.ports[0].state == "closed") {  // If server is down, send mail
+            Email.send({to: 'josephl@live.ca',      // Can change email to anything
                   from: 'throwaway42794@gmail.com',
                   subject: info.ip + " has gone down (port:  " + info.port + ").",
                   text: "Read subject!"
       });
-  //  }
+      }
 
     }));
   });
@@ -153,6 +151,10 @@ Meteor.methods(
           console.log(String(ippp))
           console.log("the above should be ippp") */
 
+          if (Tasks.findOne({ip: text[0], port: text[1]})) {
+            return;       // If the entry already exists, exit
+          }
+
           Tasks.insert({
             ip: text[0],
             port: text[1],
@@ -186,10 +188,6 @@ Meteor.methods(
     }
 
     Tasks.remove(taskId);
-  },
-
-  monitor: function (time) {
-    Meteor.setInterval((Meteor.bindEnvironment(err, (Meteor.call("updateServers")))), time);
   }
 });
 
@@ -204,7 +202,7 @@ if (Meteor.isServer) {
       name: 'Periodically check the DP&NM servers',
       schedule: function(parser) {
         // parser is a later.parse object
-        return parser.text('every 15 seconds');
+        return parser.text('every 15 minutes');
       },
       job: function() {
         console.log("about to run updateServers");
