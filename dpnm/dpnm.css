@@ -115,17 +115,14 @@ table {
   table-layout: fixed;
 }
 
-table.listing .li{
+table.listing .td{
   table-layout: fixed;
+  align: center;
 }
 
 span.text {
   word-spacing: 25px;
   padding-left: 10px;
-}
-
-header .hide-completed {
-  float: right;
 }
 
 table.li  {
