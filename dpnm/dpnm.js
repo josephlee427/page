@@ -50,6 +50,25 @@ if (Meteor.isClient) {
 
     "submit .updateServers": function (event) {
       Meteor.call("updateServers");
+    },
+
+    "submit .updateEmail": function (event) {
+
+      var oldEmail, userEmail;
+
+      if ((oldEmail = event.target.oldEmail.value) === "") {
+        return false;
+      }
+
+      if ((newEmail = event.target.newEmail.value) === "") {
+        return false;
+      }
+
+
+      Meteor.call("updateEmail", oldEmail, newEmail);
+
+      event.target.email.value = "";
+      event.target.newEmail.value = "";
     }
 
   });
@@ -68,7 +87,7 @@ if (Meteor.isClient) {
   });
 
   Accounts.ui.config({        // Users setup
-    passwordSignupFields: "USERNAME_ONLY"
+    passwordSignupFields: "USERNAME_AND_EMAIL"
   });
 }
 
@@ -178,20 +197,11 @@ Meteor.methods(
       console.log("middle of updateServers");
       var cursor = Tasks.find({});
       cursor.forEach(function (info) {
-  /**      console.log(info)
-        console.log("info ^^")
-        console.log(info.ip)
-        console.log(info.port) */
         opts = { range: [String(info.ip)], ports: String(info.port) }
-  //      console.log(opts)
-  //      console.log("opts is above this")
-
         libnmap.nmap('scan', opts, Meteor.bindEnvironment(function(err, report){
           if (err) throw err
           report.forEach(function(item) {
           serverInfo = (item[0])
-  //        console.log(info.status)
-  //        console.log(info.service)
 
           Tasks.update({ip: info.ip, port: info.port}, {
             $set:
@@ -229,6 +239,21 @@ Meteor.methods(
     }
 
     Tasks.remove(taskId);
+  },
+
+  updateEmail: function (oldEmail, userEmail) {
+
+    var user = Meteor.user().username;
+
+    if (oldEmail !== Meteor.user().emails) {
+      return;   // Old email was not right
+    }
+
+    users.update({user: user},
+      { $set: {
+              email: userEmail
+      }
+    });
   }
 });
 
@@ -253,6 +278,7 @@ if (Meteor.isServer) {
     });
 
   Meteor.startup(function () {
+      console.log(Meteor.user().emails);
       // code to run on server at startup
       SyncedCron.start();
   });
