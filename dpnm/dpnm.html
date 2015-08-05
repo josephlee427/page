@@ -24,7 +24,16 @@
         </form>
       {{/if}}
 
-      <h4> IP Port Status Service(TCP)</h4>
+      <h4>
+        <table style="width:100%">
+          <tr>
+            <th>IP</th>
+            <th>Port</th>
+            <th>Status</th>
+            <th>Service (TCP)</th>
+          </tr>
+        </table>
+      </h4>
       <form class="updateServers" method="post">
 <!--        <button class="submit"> /!-->
         <input type="submit" value="Update!">
@@ -40,11 +49,21 @@
   </div>
 
 
+
 </body>
 
+
 <template name="task">
+  <table style="width:100%" class="listing">
+        <td><strong>{{ip}}</strong></td>
+        <td><strong>{{port}}</strong></td>
+        <td>{{status}}</td>
+        <td>{{service}}</td>
+        <button class="delete">&times;</button>
+  </table>
+<!--
   <li>
     <button class="delete">&times;</button>
     <span class="text"><strong>{{ip}} - {{port}}</strong> - {{status}} - {{service}} </span>
-  </li>
+  </li> /!-->
 </template>

@@ -52,9 +52,10 @@ form {
 }
 
 h4 {
-  word-spacing: 80px;
-  margin-left: 55px;
+  table-layout: fixed;
 }
+
+
 
 .new-task input {
   box-sizing: border-box;
@@ -110,6 +111,14 @@ li.private {
   border-color: #ddd;
 }
 
+table {
+  table-layout: fixed;
+}
+
+table.listing .li{
+  table-layout: fixed;
+}
+
 span.text {
   word-spacing: 25px;
   padding-left: 10px;
@@ -117,6 +126,14 @@ span.text {
 
 header .hide-completed {
   float: right;
+}
+
+table.li  {
+    table-layout: fixed;
+    width: 300px;
+}
+
+td { align: center;
 }
 
 .toggle-private {
