@@ -70,7 +70,7 @@ if (Meteor.isClient) {
       event.target.email.value = "";
       event.target.newEmail.value = "";
 
-      return false; 
+      return false;
     }
 
   });
@@ -247,7 +247,7 @@ Meteor.methods(
 
     var user = Meteor.user().username;
 
-    if (oldEmail !== Meteor.user().emails) {
+    if (oldEmail !== Meteor.user().emails()) {
       return;   // Old email was not right
     }
 
@@ -280,7 +280,6 @@ if (Meteor.isServer) {
     });
 
   Meteor.startup(function () {
-      console.log(Meteor.user().emails);
       // code to run on server at startup
       SyncedCron.start();
   });
