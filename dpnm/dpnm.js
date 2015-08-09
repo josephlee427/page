@@ -53,8 +53,7 @@ if (Meteor.isClient) {
       Meteor.call("updateServers");
     },
 
-    "submit .updateEmail": function (event) {
-
+    "submit .change-email": function (event) {
       var oldEmail, userEmail;
 
       if ((oldEmail = event.target.oldEmail.value) === "") {
@@ -64,7 +63,6 @@ if (Meteor.isClient) {
       if ((newEmail = event.target.newEmail.value) === "") {
         return false;
       }
-
 
       Meteor.call("updateEmail", oldEmail, newEmail);
 
@@ -100,6 +98,7 @@ if (Meteor.isClient) {
 
 function updateServers() {
 
+    var admin = Meteor.users.findOne({username: "admin"});
     var opts, serverInfo;
     console.log("middle of updateServers");
     var cursor = Tasks.find({});
@@ -129,7 +128,7 @@ function updateServers() {
       });
 
       if (serverInfo.ports[0].state == "closed") {  // If server is down, send mail
-            Email.send({to: Tasks.find({username: "admin"}, {emails: 1, _id: 0}),      // Can change email to anything
+            Email.send({to: admin.emails[0].address,      // Can change email to anything
                   from: 'throwaway42794@gmail.com',
                   subject: info.ip + " has gone down (port:  " + info.port + ").",
                   text: "Read subject!"
@@ -220,7 +219,7 @@ Meteor.methods(
         });
 
         if (serverInfo.ports[0].state == "closed") {  // If server is down, send mail
-              Email.send({to: Meteor.user().emails,      // Can change email to anything
+              Email.send({to: Meteor.user().emails[0].address,      // Can change email to anything
                     from: 'throwaway42794@gmail.com',
                     subject: info.ip + " has gone down (port:  " + info.port + ").",
                     text: "Read subject!"
@@ -252,13 +251,13 @@ Meteor.methods(
 
     var user = Meteor.user().username;
 
-    if (oldEmail !== Meteor.user().emails()) {
+    if (oldEmail !== Meteor.user().emails[0].address) {
       return;   // Old email was not right
     }
 
-    users.update({user: user},
+    Meteor.users.update({_id: Meteor.user()._id},
       { $set: {
-              email: userEmail
+              "emails.0.address": userEmail
       }
     });
   }
