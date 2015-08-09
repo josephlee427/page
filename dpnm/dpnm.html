@@ -41,7 +41,7 @@
             <th>Port</th>
             <th>Status</th>
             <th>Service (TCP)</th>
-<!--            <th>Delete</th> /!-->
+            <th>Delete</th>
           </tr>
         </table>
       </h4>
@@ -76,6 +76,7 @@
           {{else}}
           <td align="center"><img alt="16x16" style="width: 10%" src="red_light_offline.png"></td>
         {{/if}}
+        <td align="center">{{service}}</td>
         <button class="delete" align="center">&times;</button>
   </table>
 <!--
