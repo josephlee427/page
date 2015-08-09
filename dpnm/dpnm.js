@@ -89,7 +89,8 @@ if (Meteor.isClient) {
     },
 
     serverOnline: function () {
-      return this.status === "open"
+      return this.status === "open";
+    }
   });
 
   Accounts.ui.config({        // Users setup
@@ -128,7 +129,7 @@ function updateServers() {
       });
 
       if (serverInfo.ports[0].state == "closed") {  // If server is down, send mail
-            Email.send({to: Meteor.user().emails,      // Can change email to anything
+            Email.send({to: Tasks.find({username: "admin"}, {emails: 1, _id: 0}),      // Can change email to anything
                   from: 'throwaway42794@gmail.com',
                   subject: info.ip + " has gone down (port:  " + info.port + ").",
                   text: "Read subject!"
@@ -286,12 +287,6 @@ if (Meteor.isServer) {
   Meteor.startup(function () {
       // code to run on server at startup
       SyncedCron.start();
-      Email.send({to: Meteor.user().emails,      // Can change email to anything
-            from: 'throwaway42794@gmail.com',
-            subject: 'beep its a test',
-            text: "Read subject!"
-});
-
   });
 
 
