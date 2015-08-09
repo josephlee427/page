@@ -17,6 +17,7 @@ if (Meteor.isClient) {
       } else {
         return Tasks.find({}, {sort: {ip: 1}});
     }},
+
     onlineServers: function () {      // Count the online servers
                                       // "List of DPNM Servers" (x Online)
       return Tasks.find({status: {$ne: "closed"}}).count();
@@ -85,6 +86,14 @@ if (Meteor.isClient) {
   Template.task.helpers({
     isOwner: function () {
       return this.owner === Meteor.userId() || Meteor.user().username == "admin";
+    },
+
+    serverOnline: function () {
+      if (this.status === "open") {
+        return true;
+      } else {
+        return false;
+      }
     }
   });
 

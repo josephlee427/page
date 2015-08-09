@@ -71,8 +71,11 @@
   <table style="width:100%" class="listing">
         <td align="center"><strong>{{ip}}</strong></td>
         <td align="center"><strong>{{port}}</strong></td>
-        <td align="center">{{status}}</td>
-        <td align="center">{{service}}</td>
+        {{#if serverOnline}}
+          <td align="center"><img alt="16x16" style="width: 100%" src="green_light_online.png"></td>
+          {{else}}
+          <td align="center"><img alt="16x16" style="width: 100%" src="red_light_offline.png"></td>
+        {{/if}}
         <button class="delete" align="center">&times;</button>
   </table>
 <!--
