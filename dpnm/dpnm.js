@@ -69,6 +69,8 @@ if (Meteor.isClient) {
 
       event.target.email.value = "";
       event.target.newEmail.value = "";
+
+      return false; 
     }
 
   });
