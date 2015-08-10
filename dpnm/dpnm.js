@@ -88,14 +88,14 @@ if (Meteor.isClient) {
 
     serverOnline: function () {
       return this.status === "open";
-    },
+    }
 
 /**    isRDP: function () {
       if (this.service === "ms-wbt-server") {
         return "rdp";
       }
-    }
-  });*/
+    }*/
+  });
 
   Accounts.ui.config({        // Users setup
     passwordSignupFields: "USERNAME_AND_EMAIL"
