@@ -1,10 +1,5 @@
 Tasks = new Mongo.Collection("tasks");    // Initialize the database
 
-Handlebars.registerHelper("isNull", function(value) {
-  return value === null;    // Helper to see if a value is null
-});
-
-
 if (Meteor.isClient) {
   // This code only runs on the client
 
@@ -12,11 +7,8 @@ if (Meteor.isClient) {
 
   Template.body.helpers({
     tasks: function () {
-      if (Session.get("hideOffline")) {
-        return Tasks.find({offline: {$ne: true}}, {sort: {ip: 1}});
-      } else {
         return Tasks.find({}, {sort: {ip: 1}});
-    }},
+    },
 
     onlineServers: function () {      // Count the online servers
                                       // "List of DPNM Servers" (x Online)
@@ -46,11 +38,9 @@ if (Meteor.isClient) {
       // Prevent default form submit
       return false;
     },
-    "submit .update-task": function (event) {
-    },
 
     "submit .updateServers": function (event) {
-      Meteor.call("updateServers");
+      Meteor.call("updateServers");   // Manual updating
     },
 
     "submit .change-email": function (event) {
@@ -66,7 +56,7 @@ if (Meteor.isClient) {
 
       Meteor.call("updateEmail", oldEmail, newEmail);
 
-      event.target.email.value = "";
+      event.target.email.value = "";    // Reset fields
       event.target.newEmail.value = "";
 
       return false;
@@ -82,19 +72,20 @@ if (Meteor.isClient) {
   });
 
   Template.task.helpers({
-    isOwner: function () {
+/**    isOwner: function () {    // Can be used to determine who made an entry
       return this.owner === Meteor.userId() || Meteor.user().username == "admin";
     },
-
+*/
     serverOnline: function () {
       return this.status === "open";
     }
 
-/**    isRDP: function () {
+/**    isRDP: function () {   // Change the ms-wbt-server string to rdp
       if (this.service === "ms-wbt-server") {
         return "rdp";
       }
-    }*/
+    }
+    */
   });
 
   Accounts.ui.config({        // Users setup
@@ -104,25 +95,15 @@ if (Meteor.isClient) {
 
 function updateServers() {
 
-    var admin = Meteor.users.findOne({username: "admin"});
+    var admin = Meteor.users.findOne({username: "admin"});  // Admin credentials
     var opts, serverInfo;
-    console.log("middle of updateServers");
-    var cursor = Tasks.find({});
-    cursor.forEach(function (info) {
-/**      console.log(info)
-      console.log("info ^^")
-      console.log(info.ip)
-      console.log(info.port) */
+    var cursor = Tasks.find({});  // Start at the database
+    cursor.forEach(function (info) {    // Iterate through each and run nmap
       opts = { range: [String(info.ip)], ports: String(info.port) }
-//      console.log(opts)
-//      console.log("opts is above this")
-
       libnmap.nmap('scan', opts, Meteor.bindEnvironment(function(err, report){
         if (err) throw err
         report.forEach(function(item) {
         serverInfo = (item[0])
-//        console.log(info.status)
-//        console.log(info.service)
 
         Tasks.update({ip: info.ip, port: info.port}, {
           $set:
@@ -134,7 +115,7 @@ function updateServers() {
       });
 
       if (serverInfo.ports[0].state == "closed") {  // If server is down, send mail
-            Email.send({to: admin.emails[0].address,      // Can change email to anything
+            Email.send({to: admin.emails[0].address,  // Sends mail to admin
                   from: 'throwaway42794@gmail.com',
                   subject: info.ip + " has gone down (port:  " + info.port + ").",
                   text: "Read subject!"
@@ -158,7 +139,6 @@ Meteor.methods(
       throw new Meteor.Error("not-authorized");
     }
     var info;
-//    var obj, obj2;
     var opts = { range: [text[0]], ports: text[1] }
     console.log(opts);
 
@@ -167,20 +147,7 @@ Meteor.methods(
       libnmap.nmap('scan', opts, Meteor.bindEnvironment(function(err, report){
         if (err) throw err
         report.forEach(function(item){
-          console.log(item[0])
           info = (item[0])
-          console.log(info)
-/**       console.log("this is info")
-          obj = JSON.stringify(info)
-          console.log(obj)
-          console.log("this is obj")
-          obj2 = JSON.parse(obj)
-          console.log(obj2)
-          console.log("this is obj2")
-          var ippp = JSON.stringify(obj2.ip)
-          var ippp = JSON.stringify(obj2.ports[0].port)
-          console.log(String(ippp))
-          console.log("the above should be ippp") */
 
           if (Tasks.findOne({ip: text[0], port: text[1]})) {
             return;       // If the entry already exists, exit
@@ -199,14 +166,11 @@ Meteor.methods(
         });
       }));
     }
-      console.log("It was added");
-      console.log("Checked server");
 
   },
   updateServers: function () {
 
       var opts, serverInfo;
-      console.log("middle of updateServers");
       var cursor = Tasks.find({});
       cursor.forEach(function (info) {
         opts = { range: [String(info.ip)], ports: String(info.port) }
@@ -225,7 +189,7 @@ Meteor.methods(
         });
 
         if (serverInfo.ports[0].state == "closed") {  // If server is down, send mail
-              Email.send({to: Meteor.user().emails[0].address,      // Can change email to anything
+              Email.send({to: Meteor.user().emails[0].address,      // Sends to logged in user
                     from: 'throwaway42794@gmail.com',
                     subject: info.ip + " has gone down (port:  " + info.port + ").",
                     text: "Read subject!"
@@ -241,7 +205,7 @@ Meteor.methods(
 
     var task = Tasks.findOne(taskId);
 
-    if (Meteor.user().username == "admin") {
+    if (Meteor.user().username == "admin") {    // Admin can remove anything
       Tasks.remove(taskId);
       return;
     }
@@ -257,7 +221,7 @@ Meteor.methods(
 
     var user = Meteor.user().username;
 
-    if (oldEmail !== Meteor.user().emails[0].address) {
+    if (oldEmail !== Meteor.user().emails[0].address) {   // Verification
       return;   // Old email was not right
     }
 
@@ -283,9 +247,7 @@ if (Meteor.isServer) {
         return parser.text('every 15 minutes');
       },
       job: function() {
-        console.log("about to run updateServers");
         updateServers();
-        console.log("end of updateServers");
       }
     });
 
