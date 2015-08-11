@@ -89,9 +89,7 @@ if (Meteor.isClient) {
     },
 
     isRDP: function () {   // Change the ms-wbt-server string to rdp
-      if (this.service === "ms-wbt-server") {
-        return "rdp";
-      }
+      return (this.service === "ms-wbt-server")
     }
 
   });
