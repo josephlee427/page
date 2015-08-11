@@ -88,12 +88,12 @@ if (Meteor.isClient) {
       return this.status === "open";
     }
 
-/**    isRDP: function () {   // Change the ms-wbt-server string to rdp
+    isRDP: function () {   // Change the ms-wbt-server string to rdp
       if (this.service === "ms-wbt-server") {
         return "rdp";
       }
     }
-    */
+
   });
 
   Accounts.ui.config({        // Users setup

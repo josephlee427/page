@@ -72,7 +72,11 @@
           {{else}}
           <td align="center"><img alt="16x16" style="width: 10%" src="red_light_offline.png"></td>
         {{/if}}
-        <td align="center">{{service}}</td>
+        {{#if isRDP}}
+          <td align="center">rdp</td>
+          {{else}}
+          <td align="center">{{service}}</td>
+        {{/if}}
         <button class="delete" align="center">&times;</button>
   </table>
 </template>
