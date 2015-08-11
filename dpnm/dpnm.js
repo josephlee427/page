@@ -29,8 +29,8 @@ if (Meteor.isClient) {
         return false;
       }
 
-      if (typeof ip === 'string') {
-        if (typeof port === 'number') {
+      if (ip === String(ip)) {
+        if (port % 1 === 0) {
           Meteor.call("addTask", [ip, port]);   // Run the form into the database
 
           // Clear form
@@ -58,8 +58,8 @@ if (Meteor.isClient) {
         return false;
       }
 
-      if (typeof oldEmail === 'string') {
-        if (typeof newEmail === 'string') {
+      if (oldEmail === String(oldEmail)) {
+        if (newEmail === String(newEmail)) {
           Meteor.call("updateEmail", oldEmail, newEmail);
 
           event.target.email.value = "";    // Reset fields
