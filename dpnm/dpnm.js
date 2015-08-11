@@ -86,7 +86,7 @@ if (Meteor.isClient) {
 */
     serverOnline: function () {
       return this.status === "open";
-    }
+    },
 
     isRDP: function () {   // Change the ms-wbt-server string to rdp
       if (this.service === "ms-wbt-server") {
