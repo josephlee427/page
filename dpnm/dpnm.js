@@ -29,11 +29,15 @@ if (Meteor.isClient) {
         return false;
       }
 
-      Meteor.call("addTask", [ip, port]);   // Run the form into the database
+      if (typeof ip === 'string') {
+        if (typeof port === 'number') {
+          Meteor.call("addTask", [ip, port]);   // Run the form into the database
 
-      // Clear form
-      event.target.serverIP.value = "";
-      event.target.serverPort.value = "";
+          // Clear form
+          event.target.serverIP.value = "";
+          event.target.serverPort.value = "";
+        }
+      }
 
       // Prevent default form submit
       return false;
@@ -54,10 +58,14 @@ if (Meteor.isClient) {
         return false;
       }
 
-      Meteor.call("updateEmail", oldEmail, newEmail);
+      if (typeof oldEmail === 'string') {
+        if (typeof newEmail === 'string') {
+          Meteor.call("updateEmail", oldEmail, newEmail);
 
-      event.target.email.value = "";    // Reset fields
-      event.target.newEmail.value = "";
+          event.target.email.value = "";    // Reset fields
+          event.target.newEmail.value = "";
+        }
+      }
 
       return false;
     }
