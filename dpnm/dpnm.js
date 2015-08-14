@@ -254,8 +254,6 @@ if (Meteor.isServer) {
     prettyJson: true
   });
 
-  Api.addCollection(Tasks);
-
   Api.addCollection(Meteor.users, {
       excludedEndpoints: ['getAll', 'put'],
       routeOptions: {
