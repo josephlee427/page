@@ -257,7 +257,7 @@ if (Meteor.isServer) {
   Api.addCollection(Meteor.users, {
       excludedEndpoints: ['getAll', 'put'],
       routeOptions: {
-        authRequired: true
+        authRequired: false
       },
       endpoints: {
         post: {
