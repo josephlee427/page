@@ -250,7 +250,7 @@ if (Meteor.isServer) {
   });
   var libnmap = Meteor.npmRequire('node-libnmap');  // for libnmap package
   var Api = new Restivus({
-    useDefaultAuth: true,
+    useDefaultAuth: false,
     prettyJson: true
   });
 
