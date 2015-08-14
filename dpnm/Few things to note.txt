@@ -1,0 +1,18 @@
+REST API was tried to be made with https://github.com/kahmali/meteor-restivus/
+
+Packages used in the meteor project:
+
+accounts-password      1.1.1  Password support for accounts
+accounts-ui            1.1.5  Simple templates to add login widgets to an app
+ejson                  1.0.6  Extended and Extensible JSON library
+email                  1.0.6  Send email messages
+json                   1.0.3  Provides JSON.stringify and JSON.parse for olde...
+meteor-platform        1.2.2  Include a standard set of Meteor packages in yo...
+meteorhacks:npm        1.4.0  Use npm modules with your Meteor App
+mrt:meteor-nodemailer  0.2.0  Meteor wrapper for Nodemailer
+nimble:restivus        0.8.3  Create authenticated REST APIs in Meteor 0.9+. ...
+npm-container          1.1.0+ Contains all your npm dependencies
+percolate:synced-cron  1.2.1  Allows you to define and run scheduled jobs acr...
+underscore             1.0.3  Collection of small helpers: _.map, _.each, ...
+
+
