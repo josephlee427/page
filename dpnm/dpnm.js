@@ -29,8 +29,8 @@ if (Meteor.isClient) {
         return false;
       }
 
-      if (ip === String(ip)) {
-        if (port % 1 === 0) {
+      if (ip === String(ip)) {    // Check if input is a String
+        if (port % 1 === 0) {   // Check if int
           Meteor.call("addTask", [ip, port]);   // Run the form into the database
 
           // Clear form
@@ -115,7 +115,8 @@ function updateServers() {
           $set:
           {
             status: serverInfo.ports[0].state,
-            service: serverInfo.ports[0].service
+            service: serverInfo.ports[0].service,
+  //          serverInfo: //Fill in
           }
         });
       });
@@ -123,7 +124,7 @@ function updateServers() {
       if (serverInfo.ports[0].state == "closed") {  // If server is down, send mail
             Email.send({to: admin.emails[0].address,  // Sends mail to admin
                   from: 'throwaway42794@gmail.com',
-                  subject: info.ip + " has gone down (port:  " + info.port + ").",
+                  subject: info.ip,// + " (Server: " + info.server??? + ") has gone down (port:  " + info.port + ").",
                   text: "Read subject!"
       });
       }
@@ -164,6 +165,7 @@ Meteor.methods(
             port: text[1],
             status: info.ports[0].state,
             service: info.ports[0].service,
+//            serverInfo: //Fill in
             createdAt: new Date(),
             owner: Meteor.userId(),
             username: Meteor.user().username
@@ -189,7 +191,8 @@ Meteor.methods(
             $set:
             {
               status: serverInfo.ports[0].state,
-              service: serverInfo.ports[0].service
+              service: serverInfo.ports[0].service,
+//              serverInfo: //Fill in
             }
           });
         });
@@ -197,7 +200,7 @@ Meteor.methods(
         if (serverInfo.ports[0].state == "closed") {  // If server is down, send mail
               Email.send({to: Meteor.user().emails[0].address,      // Sends to logged in user
                     from: 'throwaway42794@gmail.com',
-                    subject: info.ip + " has gone down (port:  " + info.port + ").",
+                    subject: info.ip,// + " (Server: " + info.server??? + ") has gone down (port:  " + info.port + ").",
                     text: "Read subject!"
         });
         }
@@ -245,6 +248,47 @@ if (Meteor.isServer) {
   Meteor.publish("tasks", function () {
     return Tasks.find({}, {sort: {ip: 1}})
   });
+  var libnmap = Meteor.npmRequire('node-libnmap');  // for libnmap package
+  var Api = new Restivus({
+    useDefaultAuth: true,
+    prettyJson: true
+  });
+
+  Api.addCollection(Tasks);
+
+  Api.addCollection(Meteor.users, {
+      excludedEndpoints: ['getAll', 'put'],
+      routeOptions: {
+        authRequired: true
+      },
+      endpoints: {
+        post: {
+          authRequired: false
+        },
+        delete: {
+          roleRequired: 'admin'
+        }
+      }
+  });
+
+  Api.addRoute('tasks/:id', {authRequired: true}, {
+  get: function () {
+    return Tasks.findOne(this.urlParams.id);
+  },
+  delete: {
+    roleRequired: ['author', 'admin'],
+    action: function () {
+      if (Tasks.remove(this.urlParams.id)) {
+        return {status: 'success', data: {message: 'Task removed'}};
+      }
+      return {
+        statusCode: 404,
+        body: {status: 'fail', message: 'Tasks not found'}
+      };
+    }
+  }
+  });
+
 
   SyncedCron.add({
       name: 'Periodically check the DP&NM servers',
@@ -261,25 +305,4 @@ if (Meteor.isServer) {
       // code to run on server at startup
       SyncedCron.start();
   });
-
-
-  var libnmap = Meteor.npmRequire('node-libnmap');  // for libnmap package
-/**  Meteor.startup(function () {
-    Meteor.setInterval(function () {
-        Meteor.call("updateServers")
-      },  5000)});    // 600000 = 10 minutes
-*/
-
-
 }
-/** Testing cases, insert in nodejs to find info
-  var opts = {
-  range: ['localhost', '141.223.163.64']
-}
-
-libnmap.nmap('scan', opts, function(err, report){
-  if (err) throw err
-  report.forEach(function(item){
-    console.log(item[0])
-  });
-}); */

@@ -37,6 +37,7 @@
       <h4>
         <table style="width:100%">
           <tr>
+            <th>Server</th>
             <th>IP</th>
             <th>Port</th>
             <th>Status</th>
@@ -65,6 +66,7 @@
 
 <template name="task">
   <table style="width:100%" class="listing">
+        <td align="center"><strong>{{serverInfo}}</strong></td>
         <td align="center"><strong>{{ip}}</strong></td>
         <td align="center"><strong>{{port}}</strong></td>
         {{#if serverOnline}}
